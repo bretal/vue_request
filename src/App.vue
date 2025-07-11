@@ -1,28 +1,50 @@
 <template>
-  <div id="app">
-    <div class="container">
-      <Search />
-      <List />
+  <div id="root">
+    <div class="todo-container">
+      <div class="todo-wrap">
+        <HeaderSearch />
+        <ul class="todo-main">
+          <TodoItem />
+          <TodoItem />
+          <TodoItem />
+        </ul>
+        <div class="todo-footer">
+          <MyFooter />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import List from './components/UserList';
-import Search from './components/UserSearch';
+import HeaderSearch from './components/HeaderSearch.vue';
+import MyFooter from './components/MyFooter.vue';
+import TodoItem from './pages/todos/TodoItem.vue';
 
 
 
 </script>
 
 <style>
-/* #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-} */
-
+.todo-container {
+  width: 600px;
+  margin: 0 auto;
+}
+.todo-container .todo-wrap {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+.todo-main {
+  margin-left: 0px;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  padding: 0px;
+}
+.todo-footer {
+  height: 40px;
+  line-height: 40px;
+  padding-left: 6px;
+  margin-top: 5px;
+}
 </style>
