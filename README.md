@@ -1,4 +1,4 @@
-# vue_request
+# vue_proxy_server
 
 ## Project setup
 ```
