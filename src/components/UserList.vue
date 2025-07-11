@@ -1,5 +1,6 @@
 <template>
-    <div class="row">
+    <!-- 用户信息展示列表 -->
+    <div class="row" v-show="users.length > 0">
         <div class="card" v-for="user in users" :key="user.id">
             <a :href="user.url" target="_blank">
                 <img :src="user.avatar_url" style='width: 100px' />
@@ -7,17 +8,27 @@
             <p class="card-text">{{ user.login }}</p>
         </div>
     </div>
+    <div class="show" v-show="isFirstTime && !isloading">欢迎来到搜索界面!</div>
+    <div class="show" v-show="isloading">加载中。。。。</div>
 </template>
 
 <script setup>
 import {
     useUserStore
 } from '@/utils/userstore';
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 const userStore = useUserStore();
+const isFirstTime = computed(() => userStore.isFirstLoad)
+const isloading = computed(() => userStore.loading)
 
 const users = computed(() => userStore.users)
-console.log('list拿到的数据', users.value);
+// userStore.setIsFirstLoad(users.value.length === 0)
+watch(isloading, (now) => {
+    // 只在加载完成之后触发一次
+    if (!now && userStore.users.length >= 0) {
+        userStore.setIsFirstLoad(false)
+    }
+})
 
 
 </script>
@@ -47,5 +58,13 @@ console.log('list拿到的数据', users.value);
 
 .card-text {
     font-size: 85%;
+}
+
+.show {
+    font-size: 64px;
+    text-align: center;
+    margin-top: 5rem;
+    color: red;
+    font-weight: bold;
 }
 </style>

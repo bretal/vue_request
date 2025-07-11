@@ -15,9 +15,12 @@ import { ref } from 'vue';
 import { useUserStore } from '../utils/userstore';
 const userStore = useUserStore()
 const searchText = ref('')
+
+
 //vue3中不再需要使用name给组件命名 直接使用该组件所在的文件名实现命名
 
 function searchUsers() {
+    userStore.setLoading(true)
     // console.log('searching for users with name: ', searchText.value)
     axios.get(`https://api.github.com/search/users?q=${searchText.value}`)
         .then(response => {
@@ -26,6 +29,9 @@ function searchUsers() {
         })
         .catch(error => {
             console.log(error)
+        }).finally(() => {
+            console.log('请求结束了')
+            userStore.setLoading(false)
         })
 }
 //拿到东西之后 我需要进行一次组件的通信了
