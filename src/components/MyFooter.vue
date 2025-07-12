@@ -3,13 +3,47 @@
         <input type="checkbox" />
     </label>
     <span>
-        <span>已完成0</span> / 全部2
+        <span>已完成:{{ completed }}</span> / 全部{{ data.length }}
     </span>
-    <button class="btn btn-danger">清除已完成任务</button>
+    <button class="btn btn-danger" @click="clearCompleted">清除已完成任务</button>
 
 </template>
 
 <script setup>
+import { defineEmits, defineProps, ref, watch } from 'vue';
+
+
+const props = defineProps({
+    data: {
+        type: Array,
+        requered: true
+    }
+
+})
+const completed = ref(
+    props.data.filter(item => item.done).length
+)
+watch(
+    () => props.data,
+    (newVal, oldVal) => {
+        completed.value = newVal.filter(item => item.done).length
+    },
+    {
+        deep: true
+    }
+)
+const localData = props.data
+const emits = defineEmits(['clearCompleted'])
+function clearCompleted() {
+    // 过滤出已完成的任务
+    const newData = localData.filter(item => !item.done)
+    console.log('记录已完成的任务1', newData);
+
+    emits('clearCompleted', newData)
+    //为什么点击待办项为已完成之后 为什么不会实时记录已完成的任务的个数？
+    completed.value = newData.filter(item => item.done).length
+}
+
 
 </script>
 
@@ -41,28 +75,29 @@
 .btn:focus {
     outline: none;
 }
+
 .todo-footer {
-  height: 40px;
-  line-height: 40px;
-  padding-left: 6px;
-  margin-top: 5px;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 6px;
+    margin-top: 5px;
 }
 
 .todo-footer label {
-  display: inline-block;
-  margin-right: 20px;
-  cursor: pointer;
+    display: inline-block;
+    margin-right: 20px;
+    cursor: pointer;
 }
 
 .todo-footer label input {
-  position: relative;
-  top: -1px;
-  vertical-align: middle;
-  margin-right: 5px;
+    position: relative;
+    top: -1px;
+    vertical-align: middle;
+    margin-right: 5px;
 }
 
 .todo-footer button {
-  float: right;
-  margin-top: 5px;
+    float: right;
+    margin-top: 5px;
 }
 </style>
